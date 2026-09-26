@@ -1,3 +1,5 @@
+require("dotenv").config(); 
+
 const port = 4000;
 const express = require("express");
 const app = express();
@@ -12,13 +14,19 @@ app.use(express.json());
 app.use(cors());
 
 // Database Connection With MongoDB
-mongoose.connect("mongodb+srv://imaaz888:inspectormills@cybertech.6gzcwrf.mongodb.net/e-commerce");
+mongoose.connect(process.env.MONGODB_URI);
 
 // API Creation
 
 app.get("/", (req,res) => {
     res.send("Express App is Running")
 })
+
+// for testing purpose only
+app.get("/api/health", (req,res)  => {
+    //alert("API is working fine");
+    res.send("API is working fine");
+})  
 
 // Image Storage Engine
 const storage = multer.diskStorage({
@@ -89,6 +97,8 @@ app.post('/add-product', async (req,res) => {
         name: req.body.name,
     })
 })
+
+
 
 // API for removing products
 app.post('/remove-product', async (req,res) => {
