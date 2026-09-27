@@ -1,0 +1,67 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check MongoDB secret
+        working-directory: backend
+        run: |
+          if [ -z "$MONGODB_URI" ]; then
+            echo "MONGODB_URI is NOT set"
+            exit 1
+          else
+            echo "MONGODB_URI is set"
+          fi
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }} 
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+      - name: check backend syntax
+        working-directory: backend
+        run: node --check index.js
+      - name: Run backend tests
+        working-directory: backend
+        run: npm test
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+          
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: check frontend syntax
+        working-directory: frontend
+        run: npm run build
+      
+      - name: Install Admin dependencies
+        working-directory: admin
+        run: npm ci
+      - name: check Admin syntax
+        working-directory: admin
+        run: npm run build
+      - name: Lint Admin Code
+        working-directory: admin
+        run: npm run lint
+        
+    
+
+      
+
+
+
+

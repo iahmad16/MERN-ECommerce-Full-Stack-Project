@@ -1,4 +1,4 @@
-import React from 'react'
+
 import './Navbar.css'
 import nav_logo from '../../assets/navlogo.png'
 import nav_profile from '../../assets/nav-profile.svg'

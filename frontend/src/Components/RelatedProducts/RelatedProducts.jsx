@@ -14,7 +14,7 @@ const RelatedProducts = (props) => {
     fetch(`http://localhost:4000/related-${product.category}`)
     .then(res => res.json())
     .then(data => setRelatedProducts(data));
-  },[])
+  }, [product]);
 
   return (
     <div className='relatedproducts'>
